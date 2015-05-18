@@ -462,13 +462,8 @@ extern void boardInit();
 #endif
 
 #if defined(PCBTARANIS)
-  #if defined(TARANIS_INTERNAL_PPM)
-    #define IS_MODULE_PPM(idx)                (idx==TRAINER_MODULE || (idx==INTERNAL_MODULE && g_model.internalModule==MODULE_TYPE_PPM)|| (idx==EXTERNAL_MODULE && g_model.externalModule==MODULE_TYPE_PPM))
-    #define IS_MODULE_XJT(idx)                (((idx==INTERNAL_MODULE && g_model.internalModule==MODULE_TYPE_XJT)|| (idx==EXTERNAL_MODULE && g_model.externalModule==MODULE_TYPE_XJT)) && (g_model.moduleData[idx].rfProtocol != RF_PROTO_OFF))
-  #else
-    #define IS_MODULE_PPM(idx)                (idx==TRAINER_MODULE || (idx==EXTERNAL_MODULE && g_model.externalModule==MODULE_TYPE_PPM))
-    #define IS_MODULE_XJT(idx)                ((idx==INTERNAL_MODULE || (idx==EXTERNAL_MODULE && g_model.externalModule==MODULE_TYPE_XJT)) && (g_model.moduleData[idx].rfProtocol != RF_PROTO_OFF))
- #endif
+  #define IS_MODULE_PPM(idx)                (idx==TRAINER_MODULE || (idx==EXTERNAL_MODULE && g_model.externalModule==MODULE_TYPE_PPM))
+  #define IS_MODULE_XJT(idx)                ((idx==INTERNAL_MODULE || (idx==EXTERNAL_MODULE && g_model.externalModule==MODULE_TYPE_XJT)) && (g_model.moduleData[idx].rfProtocol != RF_PROTO_OFF))
   #if defined(DSM2)
     #define IS_MODULE_DSM2(idx)             (idx==EXTERNAL_MODULE && g_model.externalModule==MODULE_TYPE_DSM2)
   #else
