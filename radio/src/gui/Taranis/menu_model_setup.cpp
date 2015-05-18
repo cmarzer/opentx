@@ -190,9 +190,6 @@ int getSwitchWarningsCount()
 void menuModelSetup(uint8_t event)
 {
   horzpos_t l_posHorz = m_posHorz;
-#if defined(TARANIS_INTERNAL_PPM)
-  #define IF_INTERNAL_MODULE_ON(x)          (g_model.internalModule == MODULE_TYPE_NONE ? HIDDEN_ROW : (uint8_t)(x))
-#else
   #define IF_INTERNAL_MODULE_ON(x)          (g_model.moduleData[INTERNAL_MODULE].rfProtocol == RF_PROTO_OFF ? HIDDEN_ROW : (uint8_t)(x))
   #define IF_EXTERNAL_MODULE_ON(x)          (g_model.externalModule == MODULE_TYPE_NONE ? HIDDEN_ROW : (uint8_t)(x))
   #define IF_TRAINER_ON(x)                  (g_model.trainerMode == TRAINER_MODE_SLAVE ? (uint8_t)(x) : HIDDEN_ROW)
@@ -576,32 +573,7 @@ void menuModelSetup(uint8_t event)
       case ITEM_MODEL_INTERNAL_MODULE_LABEL:
         lcd_putsLeft(y, TR_INTERNALRF);
         break;
-#if defined(TARANIS_INTERNAL_PPM)
-      case ITEM_MODEL_INTERNAL_MODULE_MODE:
-        lcd_putsLeft(y, STR_MODE);
-        lcd_putsiAtt(MODEL_SETUP_2ND_COLUMN, y, STR_TARANIS_PROTOCOLS, g_model.internalModule, m_posHorz==0 ? attr : 0);
-        if (IS_MODULE_XJT(INTERNAL_MODULE)) lcd_putsiAtt(MODEL_SETUP_2ND_COLUMN+5*FW, y, STR_XJT_PROTOCOLS, 1+g_model.moduleData[INTERNAL_MODULE].rfProtocol, m_posHorz==1 ? attr : 0);
-        if (attr && s_editMode>0) {
-          switch (m_posHorz) {
-            case 0:
-              g_model.internalModule = checkIncDec(event, g_model.internalModule, MODULE_TYPE_NONE, MODULE_TYPE_COUNT-2, EE_MODEL, isModuleAvailable);
-              if (checkIncDec_Ret) {
-                g_model.moduleData[INTERNAL_MODULE].rfProtocol = 0;
-                g_model.moduleData[INTERNAL_MODULE].channelsStart = 0;
-                if (g_model.internalModule == MODULE_TYPE_PPM) g_model.moduleData[INTERNAL_MODULE].channelsCount = 0;
-                else g_model.moduleData[INTERNAL_MODULE].channelsCount = MAX_INTERNAL_MODULE_CHANNELS();
-              }
-              break;
-            case 1:
-              CHECK_INCDEC_MODELVAR(event, g_model.moduleData[INTERNAL_MODULE].rfProtocol, RF_PROTO_X16, RF_PROTO_LAST);
-              if (checkIncDec_Ret) {
-                g_model.moduleData[INTERNAL_MODULE].channelsStart = 0;
-                g_model.moduleData[INTERNAL_MODULE].channelsCount = MAX_INTERNAL_MODULE_CHANNELS();
-              }
-            }
-          }
-        break;
-#else
+
       case ITEM_MODEL_INTERNAL_MODULE_MODE:
         lcd_putsLeft(y, STR_MODE);
         lcd_putsiAtt(MODEL_SETUP_2ND_COLUMN, y, STR_XJT_PROTOCOLS, 1+g_model.moduleData[0].rfProtocol, attr);
